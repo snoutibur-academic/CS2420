@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <stack>
 #include <queue>
 #include <vector>
 using namespace std;
@@ -139,7 +140,7 @@ ostream &operator <<(ostream &out, const Graph<Type> &g) {
 
 template<typename Type>
 vector<Type> Graph<Type>::getPath(Type source, Type dest) {
-    queue<Type> unvisited; // Using a breadth first traversal
+    stack<Type> unvisited; // Using a breadth first traversal
     vector<bool> visited(getNumVertices(), false); // Tracks index of what's been visited
     vector<Type> parents(getNumVertices());
     vector<Type> solution;
@@ -149,7 +150,7 @@ vector<Type> Graph<Type>::getPath(Type source, Type dest) {
     unvisited.push(source);
 
     while (!unvisited.empty()) {
-        curr = unvisited.front();
+        curr = unvisited.top();
         unvisited.pop();
 
         if (curr == dest) { // Destination node check
