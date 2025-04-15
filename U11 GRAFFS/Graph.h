@@ -1,9 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <memory>
+#include <queue>
 #include <vector>
-#include <stack>
 using namespace std;
 
 
@@ -15,10 +16,6 @@ ostream &operator <<(ostream &out, const Graph<Type> &g);
 
 template<typename Type>
 class Graph {
-private:
-    vector<Type> verticies;
-    vector<vector<Type> > edges;
-
 public:
     Graph();
 
@@ -35,6 +32,10 @@ public:
     friend ostream &operator <<<>(ostream &out, const Graph<Type> &g);
 
     vector<Type> getPath(Type, Type);
+
+private:
+    vector<Type> verticies;
+    vector<vector<Type> > edges;
 };
 
 
@@ -84,7 +85,7 @@ int Graph<Type>::getVertexPos(Type item) {
 template<typename Type>
 void Graph<Type>::addEdge(Type source, Type target) {
     int srcPos = getVertexPos(source);
-    if (srcPos<0) {
+    if (srcPos < 0) {
         throw runtime_error("Vertex no existy");
     }
     edges[srcPos].push_back(target);
@@ -93,11 +94,11 @@ void Graph<Type>::addEdge(Type source, Type target) {
 template<typename Type>
 bool Graph<Type>::isEdge(Type source, Type dest) {
     int srcPos = getVertexPos(source);
-    if (srcPos<0) {
+    if (srcPos < 0) {
         throw runtime_error("Vertex no existy");
     }
 
-    for (unsigned int i=0; i<edges[i].size(); i++) {
+    for (unsigned int i = 0; i < edges[i].size(); i++) {
         if (edges[srcPos][i] == dest) {
             return true;
         }
@@ -114,9 +115,9 @@ bool Graph<Type>::isEdge(Type source, Type dest) {
 *********************************************/
 template<typename Type>
 ostream &operator <<(ostream &out, const Graph<Type> &g) {
-    for (unsigned int i=0; i<g.verticies.size(); i++) {
+    for (unsigned int i = 0; i < g.verticies.size(); i++) {
         out << g.verticies[i] << ": ";
-        for (unsigned int e=0; e<g.edges[i].size(); e++) {
+        for (unsigned int e = 0; e < g.edges[i].size(); e++) {
             out << g.edges[i][e] << " ";
         }
         out << endl;
@@ -135,24 +136,51 @@ ostream &operator <<(ostream &out, const Graph<Type> &g) {
   are the verticies it will travel to get to the destination.  There will not be any
   other verticies in the list.
 */
+
 template<typename Type>
 vector<Type> Graph<Type>::getPath(Type source, Type dest) {
-    stack<Type> unvisited;
+    queue<Type> unvisited; // Using a breadth first traversal
     vector<bool> visited(getNumVertices(), false); // Tracks index of what's been visited
-    vector<Type> parents;
+    vector<Type> parents(getNumVertices());
     vector<Type> solution;
+    Type curr;
 
-    // Start node unvisited
+    // Traversal //
     unvisited.push(source);
 
     while (!unvisited.empty()) {
-        Type curr = unvisited.top();
+        curr = unvisited.front();
+        unvisited.pop();
 
         if (curr == dest) { // Destination node check
             break;
         }
-        
+
+        if (visited[getVertexPos(curr)] == true) {
+            continue; // Breaks out of current iteration to the next one
+        }
+
+        visited[getVertexPos(curr)] = true; // Mark current node as visited
+
+        for (int i=0; i<edges[getVertexPos(curr)].size(); i++) { // Iterates through the children
+            Type currChild = edges[getVertexPos(curr)][i]; // i
+
+            // child visited check
+            if (visited[getVertexPos(currChild)] == false) { // if child is not visited
+                unvisited.push(currChild);
+                parents[getVertexPos(currChild)] = curr;
+            }
+        }
     }
 
+    // Adds the path to solution
+    curr = dest;
+    while (curr != source) {
+        solution.push_back(curr);
+        curr = parents[getVertexPos(curr)];
+    }
+    solution.push_back(source);
+    // Reverse solution list
+    reverse(solution.begin(), solution.end());
     return solution;
 }
