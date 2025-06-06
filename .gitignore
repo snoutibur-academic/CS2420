@@ -1,0 +1,88 @@
+# Build directories and artifacts
+/build/
+/bin/
+/obj/
+/out/
+/Debug/
+/Release/
+/x64/
+/x86/
+/cmake-build-*/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Visual Studio specific (if applicable)
+.vs/
+*.vcxproj.*
+*.sln
+*.user
+*.opensdf
+*.sdf
+*.ipch
+*.pch
+*.pdb
+
+# Code::Blocks
+*.layout
+*.cbp
+*.depend
+
+# Qt Creator
+*.pro.user
+*.qmake.stash
+*.moc
+*.obj
+*.qrc.cpp
+
+# Xcode
+*.xcworkspace
+*.xcuserdata/
+*.xcuserstate
+*.xcodeproj
+
+# Linux/Mac system files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Editor backups and swap files
+*.bak
+*.tmp
+*.temp
+*.orig
+
+# Logs and reports
+*.log
+*.out
+*.err
+
+# Generated executables and shared libraries
+*.exe
+*.dll
+*.so
+*.dylib
+*.lib
+*.a
+
+# Coverage and profiling
+*.gcda
+*.gcno
+*.prof
+*.profdata
+*.iprof
+
+# Package managers and build systems
+vcpkg_installed/
+conanbuildinfo.txt
+conaninfo.txt
+build/
+
+# Others
+*.cache
+*.obj
+*.o
